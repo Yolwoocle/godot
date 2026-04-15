@@ -1932,12 +1932,14 @@ void TileDataTerrainsEditor::_tile_set_changed() {
 	// Fix if wrong values are selected.
 	int terrain_set = int(dummy_object->get("terrain_set"));
 	if (terrain_set >= tile_set->get_terrain_sets_count()) {
-		terrain_set = -1;
+		// Set to the first available Terrain Set if valid 
+		terrain_set = tile_set->get_terrain_sets_count() > 0 ? 0 : -1;
 		dummy_object->set("terrain_set", -1);
 	}
 	if (terrain_set >= 0) {
 		if (int(dummy_object->get("terrain")) >= tile_set->get_terrains_count(terrain_set)) {
-			dummy_object->set("terrain", -1);
+			// Set to the first Terrain if valid 
+			dummy_object->set("terrain", tile_set->get_terrains_count(terrain_set) > 0 ? 0 : -1);
 		}
 	}
 
@@ -2905,9 +2907,9 @@ TileDataTerrainsEditor::TileDataTerrainsEditor() {
 
 	// Setup
 	dummy_object->add_dummy_property("terrain_set");
-	dummy_object->set("terrain_set", -1);
+	dummy_object->set("terrain_set", 0);
 	dummy_object->add_dummy_property("terrain");
-	dummy_object->set("terrain", -1);
+	dummy_object->set("terrain", 0);
 
 	// Get the default value for the type.
 	terrain_set_property_editor = memnew(EditorPropertyEnum);
